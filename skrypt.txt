@@ -1,0 +1,524 @@
+create database Hotel;
+use Hotel;
+
+CREATE TABLE IF NOT EXISTS `Pokoj` (
+  `Nr_pokoju` INT NOT NULL,
+  `Liczba_Miejsc` TINYINT(1) NOT NULL,
+  `Liczba_Lozek_2_os` ENUM('0', '1', '2', '3') NOT NULL,
+  `Liczba_Lozek_1_os` ENUM('0', '1', '2', '3', '4', '5', '6') NOT NULL,
+  PRIMARY KEY (`Nr_pokoju`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `Klient` (
+  `Id` INT NOT NULL,
+  `Imie` VARCHAR(20) NOT NULL,
+  `Nazwisko` VARCHAR(30) NOT NULL,
+  `Nr_telefonu` CHAR(9) NOT NULL,
+  `Adres_mailowy` VARCHAR(50) NOT NULL,
+  `Ulica` VARCHAR(60) NOT NULL,
+  `Nr_domu/lokalu` VARCHAR(10) NOT NULL,
+  `Kod_pocztowy` VARCHAR(6) NOT NULL,
+  `Miejscowosc` VARCHAR(60) NOT NULL,
+  `Pesel` CHAR(11) NOT NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `Rezerwacja` (
+  `Id` INT NOT NULL,
+  `Id_klienta` INT NOT NULL,
+  `Poczatek_rezerwacji` DATE NOT NULL,
+  `Koniec_rezerwacji` DATE NOT NULL,
+  `Cena` SMALLINT(5) NOT NULL,
+  `Koszt_anulowania_rezerwacji` SMALLINT(5) NOT NULL,
+  `Rodzaj_platnosci` ENUM('Karta', 'Gotowka', 'Blik', 'Przelew') NOT NULL,
+  PRIMARY KEY (`Id`, `Id_klienta`),
+  INDEX `Id_klienta_idx` (`Id_klienta` ASC) VISIBLE,
+  CONSTRAINT `Id_klienta`
+    FOREIGN KEY (`Id_klienta`)
+    REFERENCES `hotel`.`Klient` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `Pokoje_do_rezerwacji` (
+  `Nr_pokoju` INT NOT NULL,
+  `Id` INT NOT NULL,
+  PRIMARY KEY (`Nr_pokoju`, `Id`),
+  INDEX `Id_idx` (`Id` ASC) VISIBLE,
+  CONSTRAINT `Nr_pokoju`
+    FOREIGN KEY (`Nr_pokoju`)
+    REFERENCES `hotel`.`Pokoj` (`Nr_pokoju`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Id`
+    FOREIGN KEY (`Id`)
+    REFERENCES  `hotel`.`Rezerwacja` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `Osoba_wspoltowarzyszaca` (
+  `Id_os_wsp` INT NOT NULL,
+  `Id_klienta` INT NOT NULL,
+  `Imie` VARCHAR(20) NOT NULL,
+  `Nazwisko` VARCHAR(30) NOT NULL,
+  `Nr_telefonu` CHAR(9) NOT NULL,
+  `Adres_mailowy` VARCHAR(50) NOT NULL,
+  `Pesel` CHAR(11) NOT NULL,
+  PRIMARY KEY (`Id_os_wsp`, `Id_klienta`),
+  INDEX `Id_klienta_idx` (`Id_klienta` ASC) VISIBLE,
+  CONSTRAINT `Id_klienta1`
+    FOREIGN KEY (`Id_klienta`)
+    REFERENCES `hotel`.`Klient` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+insert into pokoj values
+('101', '6', '3', '0'),
+('102', '4', '2', '0'),
+('103', '4', '2', '0'),
+('104', '1', '0', '1'),
+('105', '1', '0', '1'),
+('106', '4', '2', '0'),
+('107', '4', '2', '0'),
+('108', '2', '1', '0'),
+('109', '2', '1', '0'),
+('110', '5', '2', '1'),
+('111', '5', '2', '1'),
+('112', '2', '1', '0'),
+('113', '2', '1', '0'),
+('114', '5', '2', '1'),
+('115', '5', '2', '1'),
+('116', '3', '1', '1'),
+('117', '3', '1', '1'),
+('118', '6', '3', '0'),
+('119', '6', '3', '0'),
+('120', '3', '1', '1'),
+('121', '3', '1', '1'),
+('122', '6', '3', '0'),
+('123', '6', '3', '0'),
+('124', '4', '2', '0'),
+('125', '4', '2', '0'),
+('126', '1', '0', '1'),
+('127', '1', '0', '1'),
+('128', '4', '2', '0'),
+('129', '4', '2', '0'),
+('201', '1', '0', '1'),
+('202', '5', '2', '1'),
+('203', '5', '2', '1'),
+('204', '2', '1', '0'),
+('205', '5', '2', '1'),
+('206', '5', '2', '1'),
+('207', '3', '1', '1'),
+('208', '3', '1', '1'),
+('209', '6', '3', '0'),
+('210', '6', '3', '0'),
+('211', '3', '1', '1'),
+('212', '3', '1', '1'),
+('213', '6', '3', '0'),
+('214', '6', '3', '0'),
+('215', '4', '2', '0'),
+('216', '4', '2', '0'),
+('217', '1', '0', '1'),
+('218', '1', '0', '1'),
+('219', '4', '2', '0'),
+('220', '4', '2', '0'),
+('221', '1', '0', '1'),
+('222', '1', '0', '1'),
+('223', '5', '2', '1'),
+('224', '5', '2', '1'),
+('225', '2', '1', '0'),
+('226', '2', '1', '0'),
+('227', '5', '2', '1'),
+('228', '5', '2', '1'),
+('229', '2', '1', '0'),
+('301', '6', '3', '0'),
+('302', '6', '3', '0'),
+('303', '3', '1', '1'),
+('304', '3', '1', '1'),
+('305', '6', '3', '0'),
+('306', '6', '3', '0'),
+('307', '4', '2', '0'),
+('308', '4', '2', '0'),
+('309', '1', '0', '1'),
+('310', '1', '0', '1'),
+('311', '4', '2', '0'),
+('312', '1', '0', '1'),
+('313', '1', '0', '1'),
+('314', '5', '2', '1'),
+('315', '5', '2', '1'),
+('316', '2', '1', '0'),
+('317', '2', '1', '0'),
+('318', '5', '2', '1'),
+('319', '5', '2', '1'),
+('320', '2', '1', '0'),
+('321', '2', '1', '0'),
+('322', '6', '3', '0'),
+('323', '6', '3', '0'),
+('324', '3', '1', '1'),
+('325', '3', '1', '1'),
+('326', '6', '3', '0'),
+('327', '6', '3', '0'),
+('328', '3', '1', '1'),
+('329', '3', '1', '1'),
+('401', '1', '0', '1'),
+('402', '4', '2', '0'),
+('403', '4', '2', '0'),
+('404', '1', '0', '1'),
+('405', '1', '0', '1'),
+('406', '4', '2', '0'),
+('407', '4', '2', '0'),
+('408', '2', '1', '0'),
+('409', '2', '1', '0'),
+('410', '5', '2', '1'),
+('411', '5', '2', '1'),
+('412', '2', '1', '0'),
+('413', '2', '1', '0'),
+('414', '6', '3', '0'),
+('415', '6', '3', '0'),
+('416', '3', '1', '1'),
+('417', '6', '3', '0'),
+('418', '6', '3', '0'),
+('419', '3', '1', '1'),
+('420', '3', '1', '1'),
+('421', '1', '0', '1'),
+('422', '1', '0', '1'),
+('423', '4', '2', '0'),
+('424', '4', '2', '0'),
+('425', '1', '0', '1'),
+('426', '1', '0', '1'),
+('427', '4', '2', '0'),
+('428', '4', '2', '0'),
+('429', '2', '1', '0');
+
+
+
+insert into klient values
+('1', 'Anna', 'Kowalska', '703124133', 'a.kowalska@gmail.com', 'Krakowska', '23', '41-134', 'Warszawa', '89928006757'), 
+('2', 'Jan', 'Nowak', '879804186', 'j.nowak@gmail.com', 'Warszawska', '72', '75-298', 'Kraków', '18457719605'),
+('3', 'Maria', 'Wiśniewska', '473980901', 'm.wisniewski@gmail.com', 'Poznańska', '92', '61-089', 'Poznań', '85435145627'),
+('4', 'Andrzej', 'Wójcik', '106578323', 'a.wojcik@gmail.com', 'Łódzka', '5', '51-196', 'Łódz', '72521170944'),
+('5', 'Ewa', 'Kowalczyk', '738150706', 'e.kowalczyk@gmail.com', 'Wrocławska', '89', '33-374', 'Wrocław', '87454028817'),
+('6', 'Tomasz', 'Kozłowski', '653361706', 't.kozlowski@gmail.com', 'Gdańska', '44', '98-914', 'Gdańsk', '79258903175'), 
+('7', 'Marta', 'Jankowska', '282080545', 'm.jankowska@gmail.com', 'Katowicka', '24', '63-641', 'Katowice', '15339013088'),
+('8', 'Krzysztof', 'Majewski', '810345260', 'k.majewski@gmail.com', 'Słowackiego', '81', '58-061', 'Szczecin', '61463998680'),
+('9', 'Agnieszka', 'Król', '440293478', 'a.krol@gmail.com', 'Kopernika', '25', '23-560', 'Bydgoszcz', '51049319757'),
+('10', 'Piotr', 'Młynarczyk', '667636267', 'p.mlynarczyk@gmail.com', 'Mickiewicza', '48', '48-666', 'Lublin', '59017642569'),
+('11', 'Kasia', 'Wieczorek', '853053272', 'k.wieczorek@gmail.com', 'Sienkiewicza', '22', '35-677', 'Białystok', '40591083681'),
+('12', 'Marek', 'Adamczyk', '946637935', 'm.adamczyk@gmail.com', 'Piłsudskiego', '40', '80-249', 'Częstochowa', '39557348249'),
+('13', 'Dorota', 'Dąbrowski', '374129270', 'd.dabrowski@gmail.com', 'Konopnickiej', '42', '80-176', 'Toruń', '92032228989'),
+('14', 'Jerzy', 'Pawlak', '179565007', 'j.pawlak@gmail.com', 'Chopina', '63', '27-028', 'Gdynia', '91241368264'),
+('15', 'Joanna', 'Kaczmarek', '716764766', 'j.kaczmarek@gmail.com', 'Koszykowa', '17', '50-967', 'Sopot', '96612047818'),
+('16', 'Robert', 'Zając', '454173799', 'r.zajac@gmail.com', 'Jagiellońska', '6', '75-582', 'Kielce', '76440599092'),
+('17', 'Alicja', 'Piotrowski', '462975596', 'a.piotrowski@gmail.com', 'Szewska', '28', '99-614', 'Rzeszów', '75800819983'),
+('18', 'Stanisław', 'Grabowski', '726790147', 's.grabowski@gmail.com', 'Nowowiejska', '57', '15-763', 'Gliwice', '36479274857'),
+('19', 'Monika', 'Michalski', '355802599', 'm.michalski@gmail.com', 'Kolejowa', '47', '41-049', 'Zabrze', '96499470742'),
+('20', 'Marcin', 'Krawczyk', '133256111', 'm.krawczyk@gmail.com', 'Tadeusza Kościuszki', '54', '92-847', 'Olsztyn', '77427151310'),
+('21', 'Beata', 'Kaczorowski', '284685630', 'b.kaczorowski@gmail.com', 'Kazimierza Wielkiego', '94', '46-771', 'Bielsko-Biała', '10892138060'),
+('22', 'Ryszard', 'Zalewski', '121209014', 'r.zalewski@gmail.com', 'Mieszka I', '68', '37-246', 'Bytom', '97029521024'),
+('23', 'Iwona', 'Jabłoński', '801865244', 'i.jablonski@gmail.com', 'Stefana Batorego', '73', '89-907', 'Zielona Góra', '29225975130'),
+('24', 'Grzegorz', 'Kraska', '936844264', 'g.kraska@gmail.com', 'Obrońców Tobruku', '46', '36-982', 'Rybnik', '81590819799'),
+('25', 'Paulina', 'Makowski', '613017332', 'p.makowski@gmail.com', 'Bolesława Krzywoustego', '32', '65-009', 'Ruda Śląska', '53710785564'),
+('26', 'Wojciech', 'Dudek', '460825441', 'w.dudek@gmail.com', 'Jana Pawła II', '93', '90-084', 'Tychy', '93905252387'), 
+('27', 'Natalia', 'Wójcik', '170935266', 'n.wojcik@gmail.com', 'Piotra Skargi', '15', '25-029', 'Gorzów Wielkopolski', '48447663768'),
+('28', 'Bartłomiej', 'Kubiak', '467784454', 'b.kubiak@gmail.com', 'Słowackiego', '14', '74-660', 'Dąbrowa Górnicza', '36177027325'),
+('29', 'Martyna', 'Mazur', '114905686', 'm.mazur@gmail.com', 'Konstytucji', '64', '66-663', 'Elbląg', '97373000220'),
+('30', 'Zofia', 'Krasowski', '545409059', 'z.krasowski@gmail.com', 'Konstytucji 3 maja', '27', '87-106', 'Legnica', '92557131170'),
+('31', 'Adam', 'Urbaniak', '403782658', 'a.urbaniak@gmail.com', 'Jana III Sobieskiego', '2', '27-169', 'Opole', '16016237874'),
+('32', 'Elżbieta', 'Krajewski', '799521632', 'e.krajewski@gmail.com', 'Krakowska', '85', '69-484', 'Jaworzno', '26616690721'),
+('33', 'Maciej', 'Lis', '712709433', 'm.lis@gmail.com', 'Warszawska', '19', '28-604', 'Jastrzębie-Zdrój', '13316167522'),
+('34', 'Julia', 'Maciejewski', '108405404', 'j.maciejewski@gmail.com', 'Poznańska', '20', '97-979', 'Koszalin', '16547156396'),
+('35', 'Cezary', 'Kozak', '701633213', 'c.kozak@gmail.com', 'Łódzka', '36', '46-778', 'Wałbrzych', '32644145751'),
+('36', 'Magdalena', 'Czarnecki', '408112889', 'm.czarnecki@gmail.com', 'Wrocławska', '79', '70-518', 'Słupsk', '70326431714'),
+('37', 'Bartosz', 'Szewczyk', '883365723', 'b.szewczyk@gmail.com', 'Gdańska', '61', '74-884', 'Jelenia Góra', '17886187930'),
+('38', 'Gabriela', 'Tomaszewski', '101152614', 'g.tomaszewski@gmail.com', 'Katowicka', '60', '18-342', 'Kalisz', '14141231066'),
+('39', 'Paweł', 'Piotrkowski', '854196744', 'p.piotrkowski@gmail.com', 'Słowackiego', '7', '77-327', 'Grudziądz', '73662989058'),
+('40', 'Patrycja', 'Górski', '381483198', 'p.gorski@gmail.com', 'Kopernika', '91', '14-328', 'Siedlce', '98422767444'), 
+('41', 'Łukasz', 'Cieślak', '586357326', 'l.cieslak@gmail.com', 'Mickiewicza', '4', '83-450', 'Legionowo', '37307548658'),
+('42', 'Katarzyna', 'Dudziński', '462796802', 'k.dudzinski@gmail.com', 'Sienkiewicza', '77', '47-366', 'Piła', '85377083283'),
+('43', 'Dawid', 'Baran', '340204839', 'd.baran@gmail.com', 'Piłsudskiego', '16', '31-133', 'Stargard', '69088822721'),
+('44', 'Izabela', 'Bielecki', '613341152', 'i.bielecki@gmail.com', 'Konopnickiej', '65', '19-339', 'Ostroda', '89755721329'),
+('45', 'Radosław', 'Majchrzak', '870355654', 'r.majchrzak@gmail.com', 'Chopina', '67', '16-514', 'Mysłowice', '85968952372'),
+('46', 'Sylwia', 'Maj', '924366873', 's.maj@gmail.com', 'Koszykowa', '70', '23-958', 'Inowrocław', '38998471118'),
+('47', 'Małgorzata', 'Madej', '461161463', 'm.madej@gmail.com', 'Jagiellońska', '55', '68-883', 'Wejherowo', '96254718866'),
+('48', 'Joanna', 'Krolak', '854787520', 'j.krolak@gmail.com', 'Szewska', '88', '17-091', 'Tomaszów Mazowiecki', '46986683898'),
+('49', 'Bartosz', 'Jezierski', '820940572', 'b.jezierski@gmail.com', 'Nowowiejska', '3', '98-915', 'Pabianice', '99483582350'),
+('50', 'Agata', 'Jakubowski', '279218161', 'a.jakubowski@gmail.com', 'Kolejowa', '18', '55-385', 'Tarnów', '72165002088'),
+('51', 'Adam', 'Gajewski', '750176098', 'a.gajewski@gmail.com', 'Tadeusza Kościuszki', '49', '47-805', 'Chorzów', '41955560120'),
+('52', 'Barbara', 'Faltynowski', '634576515', 'b.faltynowski@gmail.com', 'Kazimierza Wielkiego', '10', '46-144', 'Ruda Śląska', '96011127322'),
+('53', 'Jerzy', 'Dziedzic', '171571453', 'j.dziedzic@gmail.com', 'Mieszka I', '97', '92-463', 'Tychy', '19588379101'),
+('54', 'Zofia', 'Błaszczyk', '794548076', 'z.blaszczyk@gmail.com', 'Stefana Batorego', '56', '79-487', 'Gorzów Wielkopolski', '76697593801'),
+('55', 'Józef', 'Włodarczyk', '924893153', 'j.wlodarczyk@gmail.com', 'Obrońców Tobruku', '33', '22-888', 'Dąbrowa Górnicza', '73332041099'),
+('56', 'Halina', 'Urbanowski', '813761649', 'h.urbanowski@gmail.com', 'Bolesława Krzywoustego', '86', '11-665', 'Elbląg', '15872483115'),
+('57', 'Janina', 'Szydłowski', '987841535', 'j.szydlowski@gmail.com', 'Jana Pawła II', '13', '24-343', 'Legnica', '94179148277'),
+('58', 'Stanisław', 'Szulc', '255535769', 's.szulc@gmail.com', 'Piotra Skargi', '87', '98-775', 'Opole', '76653840937'),
+('59', 'Leszek', 'Szostak', '672330881', 'l.szostak@gmail.com', 'Słowackiego', '76', '19-865', 'Jaworzno', '15034756969'),
+('60', 'Danuta', 'Szubert', '102560263', 'd.szubert@gmail.com', 'Konstytucji', '74', '37-698', 'Jastrzębie-Zdrój', '89115384711'),
+('61', 'Bogdan', 'Sroka', '428683647', 'b.sroka@gmail.com', 'Konstytucji 3 maja', '9', '33-033', 'Koszalin', '51167097595'),
+('62', 'Ewelina', 'Skrzypczak', '630293011', 'e.skrzypczak@gmail.com', 'Jana III Sobieskiego', '98', '57-228', 'Wałbrzych', '46038696202'),
+('63', 'Tadeusz', 'Skowron', '452457450', 't.skowron@gmail.com', 'Szewska', '80', '78-450', 'Słupsk', '46442867618'),
+('64', 'Teresa', 'Skorupa', '204158950', 't.skorupa@gmail.com', 'Nowowiejska', '11', '75-749', 'Jelenia Góra', '19551218645'),
+('65', 'Andrzej', 'Skalski', '544299589', 'a.skalski@gmail.com', 'Kolejowa', '75', '47-362', 'Kalisz', '69636340729'),
+('66', 'Marta', 'Sitarski', '843411254', 'm.sitarski@gmail.com', 'Tadeusza Kościuszki', '58', '82-687', 'Grudziądz', '10324522581'),
+('67', 'Barbara', 'Sikora', '703531879', 'b.sikora@gmail.com', 'Kazimierza Wielkiego', '31', '95-583', 'Siedlce', '27991964134'),
+('68', 'Piotr', 'Sidor', '771154073', 'p.sidor@gmail.com', 'Mieszka I', '26', '48-261', 'Legionowo', '61396635405'),
+('69', 'Jan', 'Siczek', '847695706', 'j.siczek@gmail.com', 'Stefana Batorego', '71', '72-755', 'Piła', '61121210698'),
+('70', 'Grażyna', 'Siejka', '910649409', 'g.siejka@gmail.com', 'Obrońców Tobruku', '78', '44-369', 'Stargard', '38453413180');
+
+
+insert into osoba_wspoltowarzyszaca values
+('1', '50', 'Adam', 'Nowak', '351324219', 'a.nowak@gmail.com', '90073789393'),
+('2', '69', 'Agnieszka', 'Kowalska', '294581323', 'a.kowalski@gmail.com', '50819702776'),
+('3', '33', 'Aleksander', 'Wiśniewski', '146257214', 'a.wisniewski@gmail.com', '54197804022'),
+('4', '66', 'Aleksandra', 'Wójcik', '152432058', 'a.wojcik@gmail.com', '98316172992'),
+('5', '24', 'Anastazja', 'Kowalczyk', '390506015', 'a.kowalczyk@gmail.com', '48115412304'),
+('6', '46', 'Andrzej', 'Kamiński', '216424768', 'a.kaminski@gmail.com', '42880253948'),
+('7', '14', 'Aneta', 'Lewandowska', '128246287', 'a.lewandowski@gmail.com', '75684493654'),
+('8', '49', 'Anna', 'Zielińska', '269430540', 'a.zielinski@gmail.com', '98582303532'),
+('9', '47', 'Antoni', 'Szymański', '912272546', 'a.szymanski@gmail.com', '52272861013'),
+('10', '51', 'Barbara', 'Wonniak', '252268038', 'b.wonniak@gmail.com', '57964560281'),
+('11', '65', 'Bartosz', 'Dąbrowski', '520996386', 'b.dabrowski@gmail.com', '71776127066'),
+('12', '61', 'Beata', 'Kozłowska', '748526907', 'b.kozlowski@gmail.com', '23896503461'),
+('13', '34', 'Bogdan', 'Jankowski', '473996136', 'b.jankowski@gmail.com', '22888729652'),
+('14', '67', 'Bogumiła', 'Mazur', '109069708', 'b.mazur@gmail.com', '36409526512'),
+('15', '28', 'Bolesław', 'Wojciechowski', '882875840', 'b.wojciechowski@gmail.com', '99497553232'),
+('16', '27', 'Branisław', 'Kwiatkowski', '807722315', 'b.kwiatkowski@gmail.com', '78772434176'),
+('17', '42', 'Cezary', 'Krawczyk', '179516876', 'c.krawczyk@gmail.com', '29461358027'),
+('18', '29', 'Danuta', 'Kaczmarek', '351787285', 'd.kaczmarek@gmail.com', '47323878511'),
+('19', '69', 'Dariusz', 'Piotrowski', '728432548', 'd.piotrowski@gmail.com', '77275369480'),
+('20', '14', 'Dawid', 'Grabowski', '944928564', 'd.grabowski@gmail.com', '15805082997'),
+('21', '57', 'Dorota', 'Nowakowska', '371686214', 'd.nowakowski@gmail.com', '38133389943'),
+('22', '14', 'Edward', 'Pawłowski', '141608219', 'e.pawlowski@gmail.com', '61630815738'),
+('23', '69', 'Elżbieta', 'Michalska', '839674344', 'e.michalski@gmail.com', '44383651892'),
+('24', '39', 'Emilia', 'Nowicka', '963183266', 'e.nowicki@gmail.com', '36373375024'),
+('25', '66', 'Ewa', 'Adamczyk', '408299910', 'e.adamczyk@gmail.com', '72560267993'),
+('26', '24', 'Ewelina', 'Dudek', '586096220', 'e.dudek@gmail.com', '65902744036'),
+('27', '33', 'Feliks', 'Zając', '162622048', 'f.zajac@gmail.com', '83975614166'),
+('28', '32', 'Franciszek', 'Wieczorek', '372937065', 'f.wieczorek@gmail.com', '79523110156'),
+('29', '67', 'Gabriela', 'Jabłońska', '981475447', 'g.jablonski@gmail.com', '19163317063'),
+('30', '28', 'Grażyna', 'Król', '335016007', 'g.krol@gmail.com', '65717369686'),
+('31', '69', 'Grzegorz', 'Majewski', '570156933', 'g.majewski@gmail.com', '24267996646'),
+('32', '48', 'Henryk', 'Olszewski', '460538741', 'h.olszewski@gmail.com', '57368768095'),
+('33', '28', 'Irena', 'Jaworska', '260884991', 'i.jaworski@gmail.com', '59208730852'),
+('34', '46', 'Iwona', 'Wróbel', '204221881', 'i.wrobel@gmail.com', '23516200207'),
+('35', '55', 'Jacek', 'Malinowski', '128855120', 'j.malinowski@gmail.com', '64199861235'),
+('36', '15', 'Jadwiga', 'Pawlak', '108761713', 'j.pawlak@gmail.com', '78411473581'),
+('37', '67', 'Jan', 'Witkowski', '542253508', 'j.witkowski@gmail.com', '96470273842'),
+('38', '69', 'Joanna', 'Walczak', '260194109', 'j.walczak@gmail.com', '36832824147'),
+
+('40', '50', 'Julia', 'Górska', '410805699', 'j.gorski@gmail.com', '95791641837'),
+('42', '33', 'Kamil', 'Michalak', '300883564', 'k.michalak@gmail.com', '36339045316'),
+('43', '11', 'Karol', 'Sikora', '953022844', 'k.sikora@gmail.com', '49970401488'),
+('45', '28', 'Katarzyna', 'Baran', '638396494', 'k.baran@gmail.com', '72393345798');
+
+
+insert into rezerwacja values
+('1', '1', '2022-12-22', '2022-12-28', '3035', '1210', 'Karta'),
+('2', '2', '2023-01-10', '2023-01-12', '1067', '420', 'Gotowka'),
+('3', '3', '2023-03-28', '2023-03-30', '1094', '430', 'Przelew'),
+('4', '4', '2023-04-03', '2023-04-07', '2012', '800', 'Blik'),
+('5', '5', '2023-04-06', '2023-04-12', '3058', '1220', 'Przelew'),
+('6', '6', '2023-05-25', '2023-05-28', '1571', '620', 'Gotowka'),
+('7', '7', '2023-07-06', '2023-07-10', '2044', '810', 'Blik'),
+('8', '8', '2023-09-29', '2023-09-30', '597', '230', 'Gotowka'),
+('9', '9', '2023-10-30', '2023-10-31', '561', '220', 'Przelew'),
+('10', '10', '2023-10-31', '2023-12-02', '1019', '400', 'Karta'),
+('11', '11', '2023-11-29', '2023-11-30', '1048', '410', 'Gotowka'),
+('12', '12', '2023-11-30', '2023-12-02', '1081', '430', 'Przelew'),
+('13', '13', '2023-12-25', '2023-12-27', '1029', '410', 'Karta'),
+('14', '14', '2022-12-22', '2022-12-23', '2075', '830', 'Gotowka'),
+('15', '15', '2023-01-10', '2023-01-12', '2015', '800', 'Blik'),
+('16', '16', '2023-03-28', '2023-03-29', '557', '220', 'Przelew'),
+('17', '17', '2023-04-03', '2023-04-06', '1523', '600', 'Gotowka'),
+('18', '18', '2023-04-06', '2023-04-10', '2092', '830', 'Blik'),
+('19', '19', '2023-05-25', '2023-05-29', '2038', '810', 'Przelew'),
+('20', '20', '2023-07-06', '2023-07-09', '1562', '620', 'Karta'),
+('21', '21', '2023-09-29', '2023-09-30', '550', '220', 'Gotowka'),
+('22', '22', '2023-10-30', '2023-10-31', '583', '230', 'Blik'),
+('23', '23', '2023-10-31', '2023-11-03', '1568', '620', 'Przelew'),
+('24', '24', '2023-11-29', '2023-11-30', '1511', '600', 'Karta'),
+('25', '25', '2023-11-30', '2023-12-02', '1059', '420', 'Gotowka'),
+('26', '26', '2023-12-25', '2023-12-27', '1074', '420', 'Przelew'),
+('27', '27', '2022-03-09', '2022-03-12', '3046', '1210', 'Blik'),
+('28', '28', '2022-03-15', '2022-03-18', '7599', '3030', 'Gotowka'),
+('29', '29', '2022-04-19', '2022-04-21', '2063', '820', 'Przelew'),
+('30', '30', '2022-04-28', '2022-04-30', '1021', '400', 'Karta'),
+('31', '31', '2022-05-26', '2022-05-28', '1053', '420', 'Gotowka'),
+('32', '32', '2022-06-27', '2022-06-30', '3085', '1230', 'Przelew'),
+('33', '33', '2022-07-05', '2022-07-09', '6070', '2420', 'Karta'),
+('34', '34', '2022-08-02', '2022-08-05', '3013', '1200', 'Gotowka'),
+('35', '35', '2022-08-31', '2022-09-03', '1560', '620', 'Blik'),
+('36', '36', '2022-10-19', '2022-10-22', '1577', '630', 'Przelew'),
+('37', '37', '2022-10-20', '2022-10-23', '1549', '610', 'Gotowka'),
+('38', '38', '2022-12-27', '2022-12-29', '1091', '430', 'Blik'),
+('39', '39', '2023-01-25', '2023-01-27', '2066', '820', 'Przelew'),
+('40', '40', '2023-03-03', '2023-03-06', '1524', '600', 'Karta'),
+('41', '41', '2023-04-03', '2023-04-08', '2555', '1020', 'Gotowka'),
+('42', '42', '2023-04-11', '2023-04-13', '2087', '830', 'Blik'),
+('43', '43', '2023-05-04', '2023-05-06', '1072', '420', 'Przelew'),
+('44', '44', '2023-05-26', '2023-05-28', '1014', '400', 'Karta'),
+('45', '45', '2023-06-19', '2023-06-21', '1061', '420', 'Gotowka'),
+('46', '46', '2023-08-10', '2023-08-14', '6079', '2430', 'Przelew'),
+('47', '47', '2023-09-07', '2023-09-10', '3051', '1220', 'Blik'),
+('48', '48', '2023-09-18', '2023-09-20', '2093', '830', 'Gotowka'),
+('49', '49', '2023-10-18', '2023-10-21', '3069', '1220', 'Przelew'),
+('50', '50', '2023-12-18', '2023-12-19', '1527', '610', 'Karta'),
+('51', '51', '2023-12-27', '2023-12-29', '2056', '820', 'Gotowka'),
+('52', '52', '2022-02-09', '2022-02-11', '1089', '430', 'Przelew'),
+('53', '53', '2022-03-14', '2022-03-16', '1073', '420', 'Karta'),
+('54', '54', '2022-03-31', '2022-04-02', '1016', '400', 'Gotowka'),
+('55', '55', '2022-05-09', '2022-05-12', '3062', '1220', 'Blik'),
+('56', '56', '2022-05-18', '2022-05-21', '1580', '630', 'Przelew'),
+('57', '57', '2022-07-25', '2022-07-27', '2052', '820', 'Gotowka'),
+('58', '58', '2022-08-12', '2022-08-15', '1595', '630', 'Blik'),
+('59', '59', '2022-09-13', '2022-09-15', '1071', '420', 'Przelew'),
+('60', '60', '2022-09-16', '2022-09-17', '530', '210', 'Karta'),
+('61', '61', '2022-12-26', '2022-12-28', '2035', '810', 'Gotowka'),
+('62', '62', '2023-01-10', '2023-01-12', '1067', '420', 'Blik'),
+('63', '63', '2023-02-21', '2023-02-24', '1594', '630', 'Przelew'),
+('64', '64', '2023-03-20', '2023-03-24', '2012', '800', 'Karta'),
+('65', '65', '2023-04-12', '2023-04-15', '3058', '1220', 'Gotowka'),
+('66', '66', '2023-05-26', '2023-05-28', '3071', '1220', 'Przelew'),
+('67', '67', '2023-07-24', '2023-07-26', '4044', '1610', 'Blik'),
+('68', '68', '2023-07-25', '2023-07-27', '1097', '430', 'Gotowka'),
+('69', '69', '2023-08-07', '2023-08-10', '12061', '4820', 'Przelew'),
+('70', '70', '2023-08-18', '2023-08-21', '1519', '600', 'Karta');
+
+
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('102', '1');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('103', '2');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('107', '3');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('110', '4');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('111', '5');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('114', '6');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('115', '7');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('115', '8');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('119', '9');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('121', '10');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('108', '11');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('122', '12');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('123', '13');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('106', '14');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('109', '15');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('124', '16');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('125', '17');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('126', '18');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('127', '19');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('128', '20');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('129', '21');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('201', '22');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('202', '23');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('120', '24');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('203', '25');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('206', '26');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('204', '27');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('205', '28');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('225', '29');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('207', '30');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('428', '31');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('317', '32');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('220', '33');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('316', '34');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('427', '35');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('426', '36');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('425', '37');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('424', '38');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('413', '39');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('423', '40');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('422', '41');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('429', '42');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('407', '43');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('406', '44');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('403', '45');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('211', '46');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('229', '47');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('321', '48');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('412', '49');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('324', '50');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('409', '51');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('402', '52');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('401', '53');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('325', '54');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('408', '55');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('326', '56');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('112', '57');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('327', '58');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('323', '59');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('322', '60');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('104', '61');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('105', '61');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('320', '62');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('315', '63');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('314', '64');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('404', '65');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('405', '65');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('416', '66');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('113', '67');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('226', '67');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('312', '68');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('117', '69');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('120', '69');
+INSERT INTO `pokoje_do_rezerwacji` (`Nr_pokoju`, `Id`) VALUES ('313', '70');
+
+
+
+# Identyfikacja klientów o imieniu Adam
+
+Create or replace view Identyfikacja  as Select 
+k.id as `ID Klienta`, 
+k.Imie, 
+k.Nazwisko, 
+k.nr_telefonu as `Nr telefonu`, 
+k.adres_mailowy as `Adres email`,
+k.Ulica, 
+k.`Nr_domu/lokalu` as `Nr domu lub lokalu`,
+k.kod_pocztowy as `Kod pocztowy`,
+k.Miejscowosc,
+k.Pesel
+from klient as k where k.imie = "Adam";
+
+# Pokazuje pokoje zajęte na dzień 2023-01-11 i datę zwolnienia 
+
+Create or replace view `Pokoje zajęte` as SELECT 
+p.nr_pokoju as `Nr pokoju`, r.Koniec_rezerwacji  as `Koniec rezerwacji`
+From rezerwacja as r inner join pokoje_do_rezerwacji as pr using (id) inner join pokoj as p using (nr_pokoju)
+where koniec_rezerwacji > "2023-01-11" and poczatek_rezerwacji < "2023-01-11";
+
+# Pokazuje pokoje wolne na stan dzisiejszy
+
+Create or replace view `Pokoje wolne` as 
+SELECT p.nr_pokoju as `Nr pokoju`, 
+p.liczba_miejsc as `Liczba Miejsc`,
+p.`Liczba_Lozek_2_os` as `Liczba łóżek 2-osobowych`,
+p.`Liczba_Lozek_1_os` as `Liczba łóżek 1-osobowych`
+ From rezerwacja as r inner join 
+pokoje_do_rezerwacji as pr using (id) inner join pokoj as p using (nr_pokoju)
+where koniec_rezerwacji < curdate();
+
+# Pokazuje informacje na temat rezerwacji pokojów na pierwszym piętrze 
+
+Create or replace view `Pokoje na pierwszym piętrze` as
+SELECT   
+ p.nr_pokoju as `Nr pokoju`,
+ r.id_klienta as `ID klienta`,
+ k.Imie,
+ K.Nazwisko,
+ r.poczatek_rezerwacji as `Początek rezerwacji`,
+ r.Koniec_rezerwacji  as `Koniec rezerwacji`
+ From rezerwacja as r inner join klient as k using (id) inner join 
+	pokoje_do_rezerwacji using (id) inner join pokoj as p using (nr_pokoju) 
+    where p.nr_pokoju between 101 and 129 order by r.poczatek_rezerwacji;
+
+# Pokazuje rezerwacje jakie zostały dokonane
+
+Create or replace view `Rezerwacje klienta` as SELECT  
+ k.Imie,
+ K.Nazwisko,
+ r.poczatek_rezerwacji as `Początek rezerwacji`,
+ r.Koniec_rezerwacji  as `Koniec rezerwacji`
+ From rezerwacja as r inner join klient as k using (id) order by poczatek_rezerwacji;
